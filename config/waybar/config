@@ -1,0 +1,84 @@
+{
+    // "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "height": 24, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 0, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": ["hyprland/workspaces", "hyprland/window",  "cpu", "memory", "disk", "keyboard-state"],
+    "modules-center": [],
+    "modules-right": ["tray", "pulseaudio", "clock", "custom/pacman", "custom/powermenu"],
+    // Modules configuration
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1"
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": {
+            "numlock": "Num {icon}",
+            "capslock": "Caps {icon}"
+        },
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "hyprland/window": {
+        "max-length": 200,
+        "separate-outputs": true
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "clock": {
+        "interval": 1,
+        "format": "{:%m/%d(%a) %T}"
+    },
+    "cpu": {
+        "format": " {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": " {percentage}%"
+    },
+    "disk": {
+        "format": " {percentage_used}%"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "custom/pacman": {
+        "format": " {}",
+        "interval": 3600,
+        "exec": "checkupdates | wc -l | sed -E 's/^0$//g'",
+        "exec-if": "exit 0",
+        "on-click": "wezterm start -- yay -Syu --devel; pkill -SIGRTMIN+8 waybar",
+        "signal": 8,
+        "min-length": 4
+    },
+    "custom/powermenu": {
+        "format": "",
+        "on-click": "wlogout",
+        "min-length": 2
+    }
+}
