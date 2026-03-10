@@ -6,6 +6,6 @@
     discord
     git
     neovim
-    chrome
+    vivaldi
   ];
 }
