@@ -57,19 +57,7 @@
         nixos = inputs.nixpkgs.lib.nixosSystem {
           system = systems;
           # Merge base config, app modules, and nixvim from the external flake
-          modules =
-            baseModules
-            ++ nixosModules
-            ++ [
-              (
-                { pkgs, inputs, ... }:
-                {
-                  environment.systemPackages = [
-                    inputs.nixvimConfig.packages.x86_64-linux.default
-                  ];
-                }
-              )
-            ];
+          modules = baseModules ++ nixosModules ++ [ ];
           specialArgs = {
             inherit inputs;
             username = username;
