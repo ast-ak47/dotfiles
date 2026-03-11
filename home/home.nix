@@ -29,7 +29,7 @@
 
 	border_size = 2;
 
-	"col.active_border" = "rgba(33ccffee) rgb(00ff99ee) 45deg";
+	"col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
 	"col.inactive_border" = "rgba(595959aa)";
 
 	resize_on_border = false;
@@ -59,6 +59,7 @@
       };
 
       animations = {
+        enabled = true;
         bezier = [
 	  "easeOutQuint, 0.23, 1, 0.32, 1"
           "easeInOutCubic, 0.65, 0.05, 0.36, 1"
@@ -93,6 +94,11 @@
 	preserve_split = true;
       };
 
+      input = {
+        kb_layout = "jp";
+	kb_model = "jp106";
+      };
+
       master = {
         new_status = "slave";
       };
@@ -113,10 +119,10 @@
 	"$mainMod, D, exec, $menu"
 
 	# move focus
-	"$mainMod, left, movefocous, l"
-	"$mainMod, right, movefocous, r"
-	"$mainMod, up, movefocous, u"
-	"$mainMod, down, movefocous, d"
+	"$mainMod, left, movefocus, l"
+	"$mainMod, right, movefocus, r"
+	"$mainMod, up, movefocus, u"
+	"$mainMod, down, movefocus, d"
 
 	# switch workspaces
 	"$mainMod, 1, workspace, 1"
@@ -149,31 +155,7 @@
 	"$mainMod SHIFT, S, exec, hyprshot -m region --clipboard-only"
 
         # Extraordinary swaylock command
-	"$mainMod, L, exec,
-	  swaylock
-	  --image '~/wallpaper/takemikazuchi.jpg'
-	  --clock
-	  --timestr '%H:%M:%S'
-	  --datestr ''
-	  --indicator
-	  --indicator-radius 128
-	  --indicator-thickness 0
-	  --indicator-x-position 1600
-	  --indicator-y-position 128
-	  --fade-in 0.2
-	  --font 'Rounded Mgen+ 1c'
-	  --font-size 128
-	  --ring-color 00d0aaff
-	  --text-color 00d0aa
-	  --text-clear-color 00d0aa
-	  --text-ver-color 00d0aa
-	  --text-wrong-color 00d0aa
-	  --inside-color 00000000
-	  --inside-clear-color 00000000
-	  --inside-ver-color 00000000
-	  --inside-wrong-color 00000000
-	  -n
-	"
+	"$mainMod, L, exec, swaylock --image '~/wallpaper/takemikazuchi.jpg' --clock --timestr '%H:%M:%S' --datestr '' --indicator --indicator-radius 128 --indicator-thickness 0 --indicator-x-position 1600 --indicator-y-position 128 --fade-in 0.2 --font 'Rounded Mgen+ 1c' --font-size 128 --ring-color 00d0aaff --text-color 00d0aa --text-clear-color 00d0aa --text-ver-color 00d0aa --text-wrong-color 00d0aa --inside-color 00000000 --inside-clear-color 00000000 --inside-ver-color 00000000 --inside-wrong-color 00000000 -n"
       ];
 
       bindm = [
