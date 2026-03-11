@@ -13,11 +13,14 @@
     discord
     docker
     ffmpeg
+    file-roller
     fish
+    font-awesome
     gammastep
     gh
     git
     github-desktop
+    gnome-keyring
     gvfs
     hyprland
     hyprpaper

@@ -114,7 +114,7 @@
 
       bind = [
         "$mainMod, Return, exec, $terminal"
-	"$mainMod SHIFT, Q, exec, killactive"
+	"$mainMod SHIFT, Q, killactive"
 	"$mainMod, E, exec, $fileManager"
 	"$mainMod, D, exec, $menu"
 
@@ -174,6 +174,423 @@
 	"waybar"
       ];
     };
+  };
+
+  programs.waybar = {
+    enable = true;
+    settings = {
+      mainBar = {
+        layer = "top";
+		position = "top";
+		height = 24;
+		
+		modules-left = [
+		"hyprland/workspaces"
+		"hyprland/window"
+		"cpu"
+		"memory"
+		"disk"
+		];
+
+		modules-center = [];
+
+		modules-right = [
+		"tray"
+		"pulseaudio"
+		"clock"
+		];
+
+		"hyprland/workspaces" = {
+		format = "{icon}";
+		on-scroll-up = "hyprctl dispatch workspace m+1";
+		on-scroll-down = "hyprctl dispatch workspace m-1";
+		};
+
+		"hyprland/window" = {
+		max-length = 200;
+		separate-outputs = true;
+		};
+
+		"tray" = {
+		icon_size = 16;
+		spacing = 10;
+		};
+
+		"clock" = {
+		interval = 1;
+		format = "{:%m/%d(%a) %T}";
+		};
+
+		"cpu" = {
+		format = " {usage}%";
+		tooltip = false;
+		};
+
+		"memory" = {
+			format = " {percentage}%";
+		};
+
+		"disk" = {
+			format = " {percentage_used}%";
+		};
+
+		"pulseaudio" = {
+			format = " {icon} {volume}% {format_source}";
+			format-bluetooth = "{icon} {volume}% {format_source}";
+			format-bluetooth-muted = " {icon} {format_source}";
+			format-muted = " {format_source}";
+			format-source = " {volume}%";
+			format-source-muted = "";
+			format-icons = {
+			  headphone = "";
+            		  hands-free = "";
+            		  headset = "";
+            		  phone = "";
+            		  portable = "";
+            		  car = "";
+			  default = [
+			    ""
+			    ""
+			    ""
+		          ];
+			};
+
+			on-click = "pavucontrol";
+		};
+	  };
+	};
+
+    style = ''
+        @define-color bg #282e34;
+        @define-color char #ffffff;
+
+        * {
+			border: none;
+			border-radius: 15px;
+			min-height: 0;
+			margin: 0.15em 0.2em;
+		}
+
+		#waybar {
+			font-family: FontAwesome, 'Rounded Mgen+ 1c', sans-serif;
+			font-size: 16px;
+		}
+
+		window#waybar {
+			background-color: rgba(0, 0, 0, 0.0);
+			border-bottom: 3px solid rgba(0, 0, 0, 0.0);
+			color: @char;
+			transition-property: background-color;
+			transition-duration: .5s;
+		}
+
+		window#waybar.hidden {
+			opacity: 0.2;
+		}
+
+		/*
+		window#waybar.empty {
+			background-color: @bg;
+		}
+		window#waybar.solo {
+			background-color: @bg;
+
+		*/
+
+		window#waybar.termite {
+			background-color: @bg;
+		}
+
+		window#waybar.chromium {
+			background-color: @bg;
+			border: none;
+		}
+
+		button {
+			/* Use box-shadow instead of border so the text isn't offset */
+			box-shadow: inset 0 -3px transparent;
+			/* Avoid rounded borders under each button name */
+			border: none;
+			border-radius: 0;
+		}
+
+		/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+		button:hover {
+			background: @bg;
+			box-shadow: inset 0 -3px #ffffff;
+		}
+
+		#workspaces button {
+			padding: 0 5px;
+			background-color: @bg;
+			color: @char;
+			border-radius: 20px;
+		}
+
+		#workspaces button:hover {
+			background: @bg;
+		}
+
+		#workspaces button.focused {
+			background-color: @bg;
+			box-shadow: inset 0 -3px #ffffff;
+		}
+
+		#workspaces button.urgent {
+			background-color: @bg;
+		}
+
+		#mode {
+			background-color: @bg;
+			border-bottom: 3px solid #ffffff;
+		}
+
+		#clock,
+		#battery,
+		#cpu,
+		#memory,
+		#disk,
+		#temperature,
+		#backlight,
+		#network,
+		#pulseaudio,
+		#wireplumber,
+		#custom-media,
+		#custom-pacman,
+		#custom-powermenu,
+		#tray,
+		#mode,
+		#idle_inhibitor,
+		#scratchpad,
+		#mpd {
+			padding: 0 10px;
+			color: @char;
+		}
+
+		#window {
+			padding: 0 10px;
+			background-color: @bg;
+			color: @char;
+			border-radius: 20px;
+		}
+
+		#workspaces {
+			margin: 0 4px;
+		}
+
+		/* If workspaces is the leftmost module, omit left margin */
+		.modules-left > widget:first-child > #workspaces {
+			margin-left: 0;
+		}
+
+		/* If workspaces is the rightmost module, omit right margin */
+		.modules-right > widget:last-child > #workspaces {
+			margin-right: 0;
+		}
+
+		#clock {
+			background-color: @bg;
+		}
+
+		#battery {
+			background-color: @bg;
+			color: @char;
+		}
+
+		#battery.charging, #battery.plugged {
+			color: @char;
+			background-color: @bg;
+		}
+
+		@keyframes blink {
+			to {
+				background-color: @bg;
+				color: @char;
+			}
+		}
+
+		#battery.critical:not(.charging) {
+			background-color: @bg;
+			color: #ffffff;
+			animation-name: blink;
+			animation-duration: 0.5s;
+			animation-timing-function: linear;
+			animation-iteration-count: infinite;
+			animation-direction: alternate;
+		}
+
+		label:focus {
+			background-color: @bg;
+		}
+
+		#cpu {
+			background-color: @bg;
+			color: #ffffff;
+		}
+
+		#memory {
+			background-color: @bg;
+		}
+
+		#disk {
+			background-color: @bg;
+		}
+
+		#backlight {
+			background-color: @bg;
+		}
+
+		#network {
+			background-color: @bg;
+		}
+
+		#network.disconnected {
+			background-color: @bg;
+		}
+
+		#pulseaudio {
+			background-color: @bg;
+			color: @char;
+		}
+
+		#pulseaudio.muted {
+			background-color: @bg;
+			color: @char;
+		}
+
+		#wireplumber {
+			background-color: @bg;
+			color: #000000;
+		}
+
+		#wireplumber.muted {
+			background-color: @bg;
+		}
+
+		#custom-media {
+			background-color: @bg;
+			color: #2a5c45;
+			min-width: 100px;
+		}
+
+		#custom-media.custom-spotify {
+			background-color: @bg;
+		}
+
+		#custom-media.custom-vlc {
+			background-color: @bg;
+		}
+
+		#temperature {
+			background-color: @bg;
+		}
+
+		#temperature.critical {
+			background-color: @bg;
+		}
+
+		#tray {
+			background-color: @bg;
+		}
+
+		#tray > .passive {
+			-gtk-icon-effect: dim;
+		}
+
+		#tray > .needs-attention {
+			-gtk-icon-effect: highlight;
+			background-color: @bg;
+		}
+
+		#idle_inhibitor {
+			background-color: @bg;
+		}
+
+		#idle_inhibitor.activated {
+			background-color: @bg;
+			color: #2d3436;
+		}
+
+		#mpd {
+			background-color: @bg;
+			color: @char;
+		}
+
+		#mpd.disconnected {
+			background-color: @bg;
+		}
+
+		#mpd.stopped {
+			background-color: @bg;
+		}
+
+		#mpd.paused {
+			background-color: @bg;
+		}
+
+		#language {
+			background: @bg;
+			color: #740864;
+			padding: 0 5px;
+			margin: 0 5px;
+			min-width: 16px;
+		}
+
+		#keyboard-state {
+			background: @bg;
+			color: @char;
+			padding: 0 0px;
+			margin: 0 5px;
+			min-width: 16px;
+		}
+
+		#keyboard-state > label {
+			padding: 0 5px;
+		}
+
+		#keyboard-state > label.locked {
+			background: @bg;
+		}
+
+		#scratchpad {
+			background: @bg;
+		}
+
+		#scratchpad.empty {
+			background-color: @bg;
+		}
+
+		#privacy {
+			padding: 0;
+		}
+
+		#privacy-item {
+			padding: 0 5px;
+			color: white;
+		}
+
+		#privacy-item.screenshare {
+			background-color: @bg;
+		}
+
+		#privacy-item.audio-in {
+			background-color: @bg;
+		}
+
+		#privacy-item.audio-out {
+			background-color: @bg;
+		}
+
+		#custom-powermenu {
+			background-color: @bg;
+			color: @char;
+		}
+	'';
+  };
+
+  programs.rofi = {
+    enable = true;
+    theme = ./config/rofi/config.rasi;
   };
 
   nixpkgs = {

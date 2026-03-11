@@ -11,7 +11,7 @@
 
     # NixVim configuration from a separate external flake
     # Ref: https://github.com/ast-ak47/nix-flakes-nixvim
-    # nixvimConfig.url = "github:ast-ak47/nix-flakes-nixvim/master";
+    nixvimConfig.url = "github:ast-ak47/nix-flakes-nixvim/master";
   };
 
   outputs =
@@ -61,14 +61,14 @@
             baseModules
             ++ nixosModules
             ++ [
-              # (
-              #   { pkgs, inputs, ... }:
-              #   {
-              #     environment.systemPackages = [
-              #       inputs.nixvimConfig.packages.x86_64-linux.default
-              #     ];
-              #   }
-              # )
+              (
+                { pkgs, inputs, ... }:
+                {
+                  environment.systemPackages = [
+                    inputs.nixvimConfig.packages.x86_64-linux.default
+                  ];
+                }
+              )
             ];
           specialArgs = {
             inherit inputs;
