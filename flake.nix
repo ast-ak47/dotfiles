@@ -33,23 +33,23 @@
       ];
     in
     {
-      # ── home-manager ──────────────────────────────────────────────────────────
-      # User-level configuration, intentionally independent from NixOS
-      # homeConfigurations = {
-      #   myHomeConfig = inputs.home-manager.lib.homeManagerConfiguration {
-      #     pkgs = import inputs.nixpkgs {
-      #       system = systems;
-      #       config.allowUnfree = true; # Allow non-free packages
-      #     };
-      #     extraSpecialArgs = {
-      #       inherit inputs;
-      #       username = username;
-      #     };
-      #     modules = [
-      #       ./home/home.nix
-      #     ];
-      #   };
-      # };
+     # ── home-manager ──────────────────────────────────────────────────────────
+     # User-level configuration, intentionally independent from NixOS
+      homeConfigurations = {
+        myHomeConfig = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs {
+            system = systems;
+            config.allowUnfree = true; # Allow non-free packages
+          };
+          extraSpecialArgs = {
+            inherit inputs;
+            username = username;
+          };
+          modules = [
+            ./home/home.nix
+          ];
+        };
+      };
 
       # ── NixOS ─────────────────────────────────────────────────────────────────
       # Replace "nixos" with your hostname if different from the default
@@ -61,14 +61,14 @@
             baseModules
             ++ nixosModules
             ++ [
-              (
-                { pkgs, inputs, ... }:
-                {
-                  environment.systemPackages = [
-                    inputs.nixvimConfig.packages.x86_64-linux.default
-                  ];
-                }
-              )
+              # (
+              #   { pkgs, inputs, ... }:
+              #   {
+              #     environment.systemPackages = [
+              #       inputs.nixvimConfig.packages.x86_64-linux.default
+              #     ];
+              #   }
+              # )
             ];
           specialArgs = {
             inherit inputs;

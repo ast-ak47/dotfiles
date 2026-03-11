@@ -14,8 +14,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "kazusa"; # Define your hostname.
+  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -42,12 +42,35 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
+  i18n. inputMethod = {
+    type = "fcitx5";
+    enable = true;
+    fcitx5 = {
+      waylandFrontend = true;
+      addons = with pkgs; [
+        fcitx5-gtk
+	fcitx5-skk
+      ];
+    };
+  };
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  programs.xwayland.enable = true;
 
-  # Enable the XFCE Desktop Environment.
+  # Enable the Hyprland Desktop Environment.
   services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  services.displayManager.defaultSession = "hyprland";
+
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+    xwayland.enable = true;
+  };
+
+  xdg.portal = {
+    enable = true;
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -78,17 +101,41 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  programs.fish.enable = true;
   users.users.ayamine = {
+    shell = pkgs.fish;
     isNormalUser = true;
     description = "ayamine";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "docker"
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
     #  thunderbird
     ];
   };
 
   # Install firefox.
-  programs.firefox.enable = true;
+  # programs.firefox.enable = true;
+
+  # ── Nix Settings ──────────────────────────────────────────────────────────────
+    nix = {
+      settings = {
+        auto-optimise-store = true; # Deduplicate identical files in the Nix store
+        # Enable nix-command (new Nix CLI) and flakes support
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+      };
+      # Run garbage collection weekly, deleting generations older than 7 days
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 7d";
+      };
+    };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -104,7 +151,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -120,4 +167,18 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
 
+  hardware.graphics = {
+    enable = true;
+  };
+
+  services.xserver.videoDrivers = ["nvidia"];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = true;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
 }

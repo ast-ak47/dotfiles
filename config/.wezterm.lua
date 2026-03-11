@@ -11,6 +11,10 @@ config.font_size = 16
 
 config.use_ime = true
 
+config.front_end = "WebGpu"
 config.enable_wayland = false
+
+config.enable_scroll_bar = true
+config.use_fancy_tab_bar = false
 
 return config
