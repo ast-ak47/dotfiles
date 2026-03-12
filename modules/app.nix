@@ -12,6 +12,7 @@
     direnv
     discord
     docker
+    fastfetch
     ffmpeg
     file-roller
     fish
@@ -43,6 +44,7 @@
     vscode
     waybar
     wezterm
+    yt-dlp
   ];
 
   fonts = {

@@ -10,6 +10,17 @@
       ./hardware-configuration.nix
     ];
 
+  # Use linxu-zen kernel
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+
+  # Add and load v4l2loopback
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    v4l2loopback
+  ];
+  boot.extraModprobeConfig = ''
+    options v4l2loopback exclusive_caps=1
+  '';
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
