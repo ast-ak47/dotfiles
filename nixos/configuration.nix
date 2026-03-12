@@ -181,4 +181,6 @@
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
+
+  services.gvfs.enable = true;
 }

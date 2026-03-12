@@ -1,4 +1,4 @@
-{ username, ... }:
+{ config, username, ... }:
 {
   imports = [
     ./apps.nix
@@ -155,7 +155,7 @@
 	"$mainMod SHIFT, S, exec, hyprshot -m region --clipboard-only"
 
         # Extraordinary swaylock command
-	"$mainMod, L, exec, swaylock --image '~/wallpaper/takemikazuchi.jpg' --clock --timestr '%H:%M:%S' --datestr '' --indicator --indicator-radius 128 --indicator-thickness 0 --indicator-x-position 1600 --indicator-y-position 128 --fade-in 0.2 --font 'Rounded Mgen+ 1c' --font-size 128 --ring-color 00d0aaff --text-color 00d0aa --text-clear-color 00d0aa --text-ver-color 00d0aa --text-wrong-color 00d0aa --inside-color 00000000 --inside-clear-color 00000000 --inside-ver-color 00000000 --inside-wrong-color 00000000 -n"
+	"$mainMod, L, exec, swaylock --image ${./wallpaper/wallpaper.png} --clock --timestr '%H:%M:%S' --datestr '' --indicator --indicator-radius 128 --indicator-thickness 0 --indicator-x-position 1600 --indicator-y-position 128 --fade-in 0.2 --font 'Rounded Mgen+ 1c' --font-size 128 --ring-color 00d0aaff --text-color 00d0aa --text-clear-color 00d0aa --text-ver-color 00d0aa --text-wrong-color 00d0aa --inside-color 00000000 --inside-clear-color 00000000 --inside-ver-color 00000000 --inside-wrong-color 00000000 -n"
       ];
 
       bindm = [
@@ -172,6 +172,24 @@
         "nm-applet"
 	"systemctl --user start hyprpolkitagent"
 	"waybar"
+      ];
+    };
+  };
+
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      wallpaper = [
+        {
+          monitor = "DP-1";
+	  path = "${./wallpaper/wallpaper.png}";
+	  fit_mode = "cover";
+        }
+        {
+          monitor = "DP-2";
+	  path = "${./wallpaper/wallpaper.png}";
+	  fit_mode = "cover";
+        }
       ];
     };
   };
@@ -590,7 +608,65 @@
 
   programs.rofi = {
     enable = true;
-    theme = ./config/rofi/config.rasi;
+    font = "Rounded Mgen+ 1c 12";
+    extraConfig = {
+      modi = "drun,run,window";
+      combi-modi = "drun,run,window";
+      show-icons = true;
+    };
+    theme = let 
+      inherit (config.lib.formats.rasi) mkLiteral;
+    in {
+      "*" = {
+        background-color = mkLiteral "#282C33";
+        border-color = mkLiteral "#2e343f";
+        text-color = mkLiteral "#8ca0aa";
+        spacing = 0;
+        width = 512;
+      };
+      "#inputbar" = {
+        border = mkLiteral "0 0 1px 0";
+	children = map mkLiteral [ "prompt" "entry" ];
+      };
+      "#prompt" = {
+        padding = mkLiteral "16px";
+	border = mkLiteral "0 1px 0 0";
+      };
+      "textbox" = {
+        background-color = mkLiteral "#2e343f";
+        border = mkLiteral "0 0 1px 0";
+    	border-color = mkLiteral "#282C33";
+    	padding = mkLiteral "8px 16px";
+      };
+      "#entry" = {
+        padding = mkLiteral "16px";
+      };
+      "#listview" = {
+        margin = mkLiteral "0 0 -1px 0";
+	scrollbar = false;
+      };
+      "#element" = {
+        border = mkLiteral "0 0 1px 0";
+	padding = mkLiteral "8px";
+      };
+      "#element selected" = {
+        background-color = mkLiteral "#2e343f";
+      };
+      "#element-text" = {
+        background-color = mkLiteral "inherit";
+        text-color = mkLiteral "inherit";
+	padding = mkLiteral "0 0 0 8px";
+      };
+      "#element-icon" = {
+        size = 24;
+	background-color = mkLiteral "inherit";
+      };
+    };
+  };
+
+  programs.wezterm = {
+    enable = true;
+    extraConfig = builtins.readFile ./config/wezterm/wezterm.lua;
   };
 
   nixpkgs = {

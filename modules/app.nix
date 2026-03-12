@@ -20,7 +20,6 @@
     gh
     git
     github-desktop
-    gnome-keyring
     gvfs
     hyprland
     hyprpaper
