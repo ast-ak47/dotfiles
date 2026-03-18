@@ -3,14 +3,19 @@
   githubUsername,
   githubEmail,
   ...
-} :
+}:
 {
+  imports = [
+    ./config/i18n.nix
+  ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     blueman
+    bottles
     direnv
     discord
+    discord-canary
     docker
     fastfetch
     ffmpeg
@@ -21,23 +26,27 @@
     gh
     git
     github-desktop
+    gnome-keyring
     gvfs
     hyprland
     hyprpaper
     hyprpolkitagent
     hyprshot
     imagemagick
-    neovim
     networkmanagerapplet
     nix-direnv
     obs-studio
     pavucontrol
     pcmanfm
+    qt5.qtwayland
+    qt6.qtwayland
     rofi
     scrcpy
     skktools
     steam
     swaylock
+    swaynotificationcenter
+    tinymist
     typst
     vivaldi
     vlc
@@ -59,7 +68,6 @@
       noto-fonts-color-emoji
       # Nerd Fonts - monospace fonts patched with icon glyphs for terminal use
       nerd-fonts._0xproto
-      nerd-fonts.jetbrains-mono
       nerd-fonts."m+"
       # General-purpose sans-serif font by Google
       roboto
@@ -108,4 +116,7 @@
       };
     };
   };
+
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.lightdm.enableGnomeKeyring = true;
 }

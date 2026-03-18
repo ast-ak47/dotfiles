@@ -5,28 +5,20 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use linxu-zen kernel
   boot.kernelPackages = pkgs.linuxPackages_zen;
-
-  # Add and load v4l2loopback
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    v4l2loopback
-  ];
-  boot.extraModprobeConfig = ''
-    options v4l2loopback exclusive_caps=1
-  '';
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "kazusa"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.wireless.enable = true; # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -53,14 +45,14 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
-  i18n. inputMethod = {
+  i18n.inputMethod = {
     type = "fcitx5";
     enable = true;
     fcitx5 = {
       waylandFrontend = true;
       addons = with pkgs; [
         fcitx5-gtk
-	fcitx5-skk
+        fcitx5-skk
       ];
     };
   };
@@ -81,6 +73,9 @@
 
   xdg.portal = {
     enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+    ];
   };
 
   # Configure keymap in X11
@@ -123,7 +118,7 @@
       "wheel"
     ];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
@@ -131,22 +126,22 @@
   # programs.firefox.enable = true;
 
   # ── Nix Settings ──────────────────────────────────────────────────────────────
-    nix = {
-      settings = {
-        auto-optimise-store = true; # Deduplicate identical files in the Nix store
-        # Enable nix-command (new Nix CLI) and flakes support
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
-      };
-      # Run garbage collection weekly, deleting generations older than 7 days
-      gc = {
-        automatic = true;
-        dates = "weekly";
-        options = "--delete-older-than 7d";
-      };
+  nix = {
+    settings = {
+      auto-optimise-store = true; # Deduplicate identical files in the Nix store
+      # Enable nix-command (new Nix CLI) and flakes support
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
+    # Run garbage collection weekly, deleting generations older than 7 days
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -182,7 +177,7 @@
     enable = true;
   };
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -194,4 +189,11 @@
   };
 
   services.gvfs.enable = true;
+
+  programs.obs-studio = {
+    enable = true;
+    enableVirtualCamera = true;
+  };
+
+  security.pam.services.psycho-locker = { };
 }
