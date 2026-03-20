@@ -113,6 +113,7 @@
     isNormalUser = true;
     description = "ayamine";
     extraGroups = [
+      "adbusers"
       "docker"
       "networkmanager"
       "wheel"
@@ -121,9 +122,6 @@
       #  thunderbird
     ];
   };
-
-  # Install firefox.
-  # programs.firefox.enable = true;
 
   # ── Nix Settings ──────────────────────────────────────────────────────────────
   nix = {
@@ -181,11 +179,15 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
+    powerManagement.enable = true;
     powerManagement.finegrained = false;
     open = true;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
+
+  programs.nix-ld = {
+    enable = true;
   };
 
   services.gvfs.enable = true;
@@ -193,6 +195,10 @@
   programs.obs-studio = {
     enable = true;
     enableVirtualCamera = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      distroav
+      obs-pipewire-audio-capture
+    ];
   };
 
   security.pam.services.psycho-locker = { };
